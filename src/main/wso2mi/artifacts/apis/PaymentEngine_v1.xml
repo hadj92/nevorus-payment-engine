@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="PaymentEngine" statistics="enable" trace="enable" context="/cashin" version="1" version-type="context" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/cashin">
+        <inSequence>
+            <log category="INFO" logMessageID="false" logFullPayload="false">
+                <message>Incomming payment request : ${payload}</message>
+            </log>
+            <variable name="amount" value="${payload.amount}" type="STRING"/>
+            <variable name="currency" type="STRING" expression="${payload.currency}"/>
+            <variable name="orderId" type="STRING" expression="${payload.orderId}"/>
+            <variable name="msisdn" type="STRING" expression="${payload.msisdn}"/>
+            <!-- <variable name="callbackUrl" type="STRING" expression="${payload.callbackUrl}"/> -->
+            <sequence key="CashinMtnCiSequence"/>
+            <log category="INFO" logMessageID="true" logFullPayload="true">
+                <message>${payload}</message>
+            </log>
+            <respond/>
+        </inSequence>
+        <faultSequence>
+        </faultSequence>
+    </resource>
+    <resource methods="POST" uri-template="/cashout">
+        <inSequence>
+            <variable name="amount" value="${payload.amount}" type="STRING"/>
+            <variable name="currency" type="STRING" expression="${payload.currency}"/>
+            <variable name="orderId" type="STRING" expression="${payload.orderId}"/>
+            <variable name="msisdn" type="STRING" expression="${payload.msisdn}"/>
+            <sequence key="CashoutMtnCiSequence"/>
+            <log category="INFO" logMessageID="true" logFullPayload="true">
+                <message></message>
+            </log>
+            <respond/>
+        </inSequence>
+        <faultSequence>
+        </faultSequence>
+    </resource>
+    <resource methods="POST" uri-template="/paylink">
+        <inSequence>
+        </inSequence>
+        <faultSequence>
+        </faultSequence>
+    </resource>
+</api>

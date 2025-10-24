@@ -1,0 +1,10 @@
+---
+key: "secure-1"
+name : "secure"
+displayName : "secure"
+description: "secure"
+version: "1"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/token"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

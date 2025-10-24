@@ -1,0 +1,13 @@
+openapi: 3.0.1
+info:
+  title: secure
+  description: API Definition of secure
+  version: "1"
+servers:
+- url: http://localhost:8290/token
+paths:
+  /token:
+    get:
+      responses:
+        default:
+          description: Default response

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="GenerateMtnAccessToken" trace="enable" statistics="enable" xmlns="http://ws.apache.org/ns/synapse">
+
+    <log category="INFO">
+        <message>=== Génération Token MTN ===</message>
+    </log>
+ 
+    <http.post configKey="mtnCiGenerateTokenConnection">
+        <relativePath>/collection/token/</relativePath>
+        <headers>[[&quot;Ocp-Apim-Subscription-Key&quot;,&quot;12b5c321de6c448b8074fa5b1592dd36&quot;]]</headers>
+        <requestBodyType>JSON</requestBodyType>
+        <requestBodyJson></requestBodyJson>
+        <forceScAccepted>false</forceScAccepted>
+        <disableChunking>false</disableChunking>
+        <forceHttp10>false</forceHttp10>
+        <noKeepAlive>false</noKeepAlive>
+        <forcePostPutNobody>false</forcePostPutNobody>
+        <responseVariable>tokenResponse</responseVariable>
+        <overwriteBody>false</overwriteBody>
+    </http.post>
+
+    <log category="DEBUG">
+        <message>Token Response: ${vars.tokenResponse.payload}</message>
+    </log>
+    <variable name="accessToken" type="STRING" expression="${vars.tokenResponse.payload.access_token}"/>
+    
+    <log category="DEBUG">
+        <message>Access Token: ${vars.accessToken}</message>
+    </log>
+</sequence>

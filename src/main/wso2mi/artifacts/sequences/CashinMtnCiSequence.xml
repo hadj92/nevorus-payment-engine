@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="CashinMtnCiSequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <sequence key="GenerateMtnAccessToken"/>
+    <script language="js"><![CDATA[
+        var uuid = java.util.UUID.randomUUID().toString();
+        mc.setVariable("referenceId", uuid);
+    ]]></script>
+    <variable name="subscriptionKey" value="2c63982018964e13811f9fead5317ccd" type="STRING"/>
+    <variable name="token" type="STRING" expression="${vars.accessToken}"/>
+
+
+    <payloadFactory media-type="json">
+        <format>
+            {
+            "amount": "${payload.amount}",
+            "currency": "${payload.currency}",
+            "externalId": "${payload.orderId}",
+            "payee": {
+            "partyIdType": "MSISDN",
+            "partyId": "${payload.msisdn}"
+            },
+            "payerMessage": "Payment for order ${payload.orderId}",
+            "payeeNote": "Cash-in transaction"
+            }
+        </format>
+    </payloadFactory>
+
+    <log category="INFO">
+        <message>=== MTN Request Details ===</message>
+    </log>
+    
+    <log category="INFO">
+        <message>X-Reference-Id: ${vars.referenceId}</message>
+    </log>
+    
+    <log category="INFO">
+        <message>X-Target-Environment: sandbox</message>
+    </log>
+    
+    <log category="INFO">
+        <message>Ocp-Apim-Subscription-Key: ${vars.subscriptionKey}</message>
+    </log>
+    
+    <log category="INFO">
+        <message>Authorization: Bearer ${vars.token}</message>
+    </log>
+    
+    <log category="INFO">
+        <message>Request Body: ${payload}</message>
+    </log>
+    
+    <http.post configKey="MtnCollectionConnection">
+        <relativePath>/disbursement/v2_0/deposit</relativePath>
+        <headers>[["X-Reference-Id","${vars.referenceId}"],["X-Target-Environment","sandbox"],["Ocp-Apim-Subscription-Key","${vars.subscriptionKey}"],["Authorization","Bearer ${vars.token}"]]</headers>
+        <requestBodyType>JSON</requestBodyType>
+        <requestBodyJson>${payload}</requestBodyJson>
+        <forceScAccepted>false</forceScAccepted>
+        <disableChunking>false</disableChunking>
+        <forceHttp10>false</forceHttp10>
+        <noKeepAlive>false</noKeepAlive>
+        <forcePostPutNobody>false</forcePostPutNobody>
+        <responseVariable>mtnCashinResponse</responseVariable>
+        <overwriteBody>false</overwriteBody>
+    </http.post>
+
+    <log category="INFO">
+        <message>MTN Cashin Response - Status Code: ${vars.mtnCashinResponse.attributes.statusCode}</message>
+    </log>
+    <payloadFactory media-type="json" template-type="default">
+        <format>{ "code" : "${vars.mtnCashinResponse.attributes.statusCode}", "message" : "Succesfuly initiated"}</format>
+    </payloadFactory>
+</sequence>

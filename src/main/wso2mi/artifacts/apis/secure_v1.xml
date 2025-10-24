@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="secure" statistics="enable" trace="enable" context="/token" version="1" version-type="context" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/token">
+        <inSequence>
+        </inSequence>
+        <faultSequence>
+        </faultSequence>
+    </resource>
+</api>

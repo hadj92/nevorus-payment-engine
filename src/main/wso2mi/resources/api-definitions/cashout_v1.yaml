@@ -1,0 +1,13 @@
+openapi: 3.0.1
+info:
+  title: cashout
+  description: API Definition of cashout
+  version: "1"
+servers:
+- url: http://localhost:8290/cashout
+paths:
+  /:
+    get:
+      responses:
+        default:
+          description: Default response
