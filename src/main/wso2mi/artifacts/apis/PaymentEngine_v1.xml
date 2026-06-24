@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api name="PaymentEngine" statistics="enable" trace="enable" context="/cashin" version="1" version-type="context" xmlns="http://ws.apache.org/ns/synapse">
+<api name="PaymentEngine" statistics="enable" trace="enable" context="/" version="1" version-type="context" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="POST" uri-template="/cashin">
         <inSequence>
             <log category="INFO" logMessageID="false" logFullPayload="false">
